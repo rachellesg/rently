@@ -1,12 +1,12 @@
 <script>
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
+import Header from "@/components/layout/Header.vue";
+import Footer from "@/components/layout/Footer.vue";
 
 export default {
   name: "Rently App",
   components: {
-    Footer,
     Header,
+    Footer,
   },
 };
 </script>
@@ -18,7 +18,7 @@ export default {
 <template>
   <div>
     <Header />
-    <main>
+    <main class="flex flex-1">
       <NuxtPage />
     </main>
     <Footer />
