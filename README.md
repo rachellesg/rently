@@ -1,6 +1,16 @@
 # RENTLY Front End Task
 
-This is my submission for the Rently Front End Task.
+This is my submission for the Rently Front End Task. The task is to implement an inventory list for apartments.
+
+## Requirements
+
+- There will be an apartment list
+- Each apartment has one inventory list
+- Users can create or update list
+- They will select an item from the dropdown list and add quantities
+- User can add a maximum of 20 items
+- User can preview the list without editing
+- User can then approve and the list will be saved
 
 ## Technologies Used
 
