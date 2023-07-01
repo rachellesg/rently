@@ -1,63 +1,25 @@
-# Nuxt 3 Minimal Starter
+# RENTLY Front End Task
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is my submission for the Rently Front End Task.
 
-## Setup
+## Technologies Used
 
-Make sure to install the dependencies:
+- Nuxt.js
+- Tailwind CSS
+- DaisyUI
 
-```bash
-# npm
-npm install
+## Installation and Usage
 
-# pnpm
-pnpm install
+To run the login component in a local development environment, follow these steps:
 
-# yarn
-yarn install
-```
+- Clone the repository: git clone <repository-url>
+- Navigate to the project directory: cd rently
+- Install the dependencies: npm install
+- Start the development server: npm run dev
+- Open a web browser and navigate to http://localhost:3000 to view the login component.
 
-## Development Server
+---
 
-Start the development server on `http://localhost:3000`:
+## Thought Process
 
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Limitations and Workarounds
