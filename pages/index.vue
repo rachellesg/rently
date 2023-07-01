@@ -6,40 +6,39 @@
     </template>
     <template v-else>
       <ApartmentList :apartments="apartments" />
+      <template v-if="error">
+        <div class="error-message">{{ error }}</div>
+      </template>
     </template>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
 import ApartmentList from "@/components/ApartmentList.vue";
+import { getApartmentsData } from "@/server/api/apartments.ts";
 
 export default {
-  name: "List of Apartments",
+  name: "ApartmentsIndex",
   components: {
     ApartmentList,
   },
-  setup() {
-    const pageTitle = ref("Apartment List");
-    const isLoading = ref(true);
-    const apartments = ref([]);
-
-    onMounted(() => {
-      isLoading.value = false;
-      apartments.value = [
-        { address: "6 Kim Tian Road", floor: 1, doorNumber: 46 },
-        { address: "39 Punggol Drive", floor: 24, doorNumber: 288 },
-        { address: "29 Nasim Avenue", floor: 0, doorNumber: 320 },
-        { address: "266 Ang Mo Kio Avenue 1", floor: 8, doorNumber: 25 },
-        { address: "Jurong East Street 56 Blk 246D", floor: 8, doorNumber: 25 },
-      ];
-    });
-
+  data() {
     return {
-      pageTitle,
-      isLoading,
-      apartments,
+      pageTitle: "Apartment List",
+      isLoading: true,
+      apartments: [],
+      error: null,
     };
+  },
+  async mounted() {
+    try {
+      this.apartments = await getApartmentsData();
+      this.isLoading = false;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      this.isLoading = false;
+      this.error = "Failed to fetch data. Please try again later.";
+    }
   },
 };
 </script>
