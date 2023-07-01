@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Apartment List</h2>
     <ul>
       <li v-for="apartment in apartments" :key="apartment.id">
         <strong>Address:</strong> {{ apartment.address }}<br />
