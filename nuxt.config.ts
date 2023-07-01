@@ -1,14 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	devtools: { enabled: true },
-	build: {
-		postcss: {
-			postcssOptions: {
-				plugins: {
-					tailwindcss: {},
-					autoprefixer: {},
-				},
-			},
-		},
-	},
+  devtools: { enabled: true },
+  modules: ["@nuxtjs/tailwindcss"],
+  tailwindcss: {
+    cssPath: "~/assets/tailwind.css",
+    configPath: "tailwind.config",
+    exposeConfig: false,
+    exposeLevel: 2,
+    config: {},
+    injectPosition: "first",
+    viewer: true,
+  },
 });
