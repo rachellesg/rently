@@ -41,7 +41,8 @@
             </div>
             <img src="https://placehold.co/1000x300" alt="Main Image " />
             <h3 class="text-lg font-bold text-gray-600 my-5">
-              Inventory List ({{ selectedApartment.inventory.length }} items)
+              Inventory List ({{ totalInventoryItems }}
+              items)
             </h3>
             <p class="text-xs">
               Inventory is a comprehensive list of items present in each
@@ -109,6 +110,17 @@ export default {
       this.isLoading = false;
       this.error = "Failed to fetch data. Please try again later.";
     }
+  },
+  computed: {
+    totalInventoryItems() {
+      if (this.selectedApartment && this.selectedApartment.inventory) {
+        return this.selectedApartment.inventory.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+      }
+      return 0;
+    },
   },
   methods: {
     selectApartment(apartment) {
