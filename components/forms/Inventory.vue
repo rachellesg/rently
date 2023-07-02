@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+  <div class="bg-gray-100 dark:bg-base-300 px-4 py-2 rounded-lg">
     <p class="text-xs mb-2">
       Click on the preview button to view the items, you will need to approve
       the final list before it will be added to the listing.

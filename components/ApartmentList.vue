@@ -7,7 +7,7 @@
         @click="selectApartment(apartment)"
         :class="{
           'text-pink-500 font-bold': selectedApartment === apartment,
-          'border-b border-gray-200 pb-3 hover:text-pink-500 hover:font-bold cursor-pointer': true,
+          'hover:bg-stone-900 light:border-gray-200 p-3 hover:text-pink-500 hover:font-bold cursor-pointer': true,
         }">
         {{ apartment.address }}, {{ apartment.floor }}-{{
           apartment.doorNumber
@@ -39,12 +39,7 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  margin-bottom: 10px;
-}
-
 li {
-  margin-bottom: 20px;
   list-style-type: none;
 }
 </style>
