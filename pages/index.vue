@@ -12,7 +12,7 @@
       </h1>
       <div class="content md:flex-row flex-col flex justify-between md:gap-5">
         <div
-          class="w-full bg-white md:w-1/3 border border-slate-200 rounded-lg p-5 md:m-0 mb-5">
+          class="w-full dark:bg-gray-700 bg-white md:w-1/3 border border-slate-200 rounded-lg p-5 md:m-0 mb-5">
           <h2 class="mb-4 text-lg font-bold">
             Listings ({{ filteredListings.length }})
           </h2>
@@ -31,11 +31,11 @@
           </template>
         </div>
         <section
-          class="w-full bg-white md:w-2/3 border border-slate-200 rounded-lg p-5">
+          class="w-full dark:bg-gray-700 bg-white md:w-2/3 border border-slate-200 rounded-lg p-5">
           <template v-if="selectedApartment">
             <div
               class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
-              <h2 class="text-xl font-bold text-gray-800 flex">
+              <h2 class="text-xl font-bold flex">
                 {{ selectedApartment.address }} #{{
                   selectedApartment.floor
                 }}-{{ selectedApartment.doorNumber }}
@@ -48,7 +48,7 @@
               </button>
             </div>
             <img src="https://placehold.co/1000x300" alt="Main Image " />
-            <h3 class="text-lg font-bold text-gray-600 my-5">
+            <h3 class="text-lg font-bold my-5">
               Inventory List ({{ totalInventoryItems }}
               items)
             </h3>

@@ -16,7 +16,7 @@ export default {
 </style>
 
 <template>
-  <div class="flex flex-col h-screen bg-stone-50">
+  <div class="flex flex-col h-screen bg-stone-50 dark:bg-black">
     <Header />
     <main class="flex flex-1">
       <NuxtPage />
