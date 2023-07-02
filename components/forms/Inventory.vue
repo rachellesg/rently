@@ -9,6 +9,7 @@
         <select
           v-model="newItem.name"
           required
+          ref="nameInput"
           class="select select-bordered select-sm w-4/5">
           <option value="" disabled selected>Please select an item</option>
           <option value="Sofa">Sofa</option>
@@ -23,6 +24,7 @@
           <option value="Bookshelf">Bookshelf</option>
         </select>
         <input
+          ref="quantityInput"
           type="number"
           min="1"
           :max="20 - totalItems"
@@ -32,6 +34,7 @@
       </div>
       <div class="mb-3">
         <input
+          ref="fileInput"
           type="file"
           accept="image/jpeg, image/png"
           @change="handleImageUpload"
@@ -64,6 +67,9 @@ export default {
       const itemCopy = { ...this.newItem };
       this.$emit("addItem", itemCopy);
       this.newItem.quantity = 1;
+      this.$refs.nameInput.selectedIndex = -1; // Reset the selected option
+      this.$refs.quantityInput.value = ""; // Reset the quantity input value
+      this.$refs.fileInput.value = ""; // Reset the file input value
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
