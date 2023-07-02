@@ -13,9 +13,17 @@
       <div class="content md:flex-row flex-col flex justify-between md:gap-5">
         <div
           class="w-full bg-white md:w-1/3 border border-slate-200 rounded-lg p-5 md:m-0 mb-5">
-          <h2 class="mb-4 text-lg font-bold">Listings</h2>
+          <h2 class="mb-4 text-lg font-bold">
+            Listings ({{ filteredListings.length }})
+          </h2>
+          <input
+            type="text"
+            class="input input-sm input-bordered mb-5 w-full"
+            ref="searchInput"
+            v-model="searchQuery"
+            placeholder="Search..." />
           <ApartmentList
-            :apartments="apartments"
+            :apartments="filteredListings"
             :selectedApartment="selectedApartment"
             @selectApartment="selectApartment" />
           <template v-if="error">
@@ -103,6 +111,7 @@ export default {
       selectedApartment: null,
       inventory: [],
       updatedInventory: [],
+      searchQuery: "",
     };
   },
   async mounted() {
@@ -131,6 +140,15 @@ export default {
         return this.inventory.reduce((sum, item) => sum + item.quantity, 0);
       }
       return 0;
+    },
+    filteredListings() {
+      const query = this.searchQuery.toLowerCase().toString();
+      return this.apartments.filter(
+        (item) =>
+          item.address.toLowerCase().includes(query) ||
+          item.floor.toString().includes(query) ||
+          item.doorNumber.toString().includes(query)
+      );
     },
   },
   methods: {
