@@ -46,8 +46,13 @@
               inventory, reflecting the diverse needs and preferences of the
               residents.
             </p>
-            <InventoryList :inventory="this.inventory" editable />
+            <h3 class="text-lg font-bold text-gray-600 my-5">
+              Inventory List ({{ inventory.length }} items)
+            </h3>
             <InventoryForm @addItem="addItem" />
+            <InventoryList
+              :inventory="this.selectedApartment.inventory"
+              editable />
           </template>
         </section>
       </div>
@@ -56,11 +61,13 @@
   <ModalDialog
     modal-id="preview-modal"
     :visible="isPreview"
-    @close="closeModal">
+    @close="closeModal"
+    :buttonClick="approveList">
     <h3 class="font-bold text-lg">Preview Inventory List</h3>
     <InventoryList :inventory="this.inventory" />
-    <button class="btn btn-primary">Approve</button>
+    <button class="btn btn-primary" @click="approveList">Approve</button>
   </ModalDialog>
+  {{ console.log(inventory, selectedApartment) }}
 </template>
 
 <script>
@@ -87,15 +94,13 @@ export default {
       error: null,
       selectedApartment: null,
       inventory: [],
+      updatedInventory: [],
     };
   },
   async mounted() {
     try {
       this.apartments = await getApartmentsData();
       this.selectedApartment = this.apartments[0] || null;
-      if (this.selectedApartment && this.selectedApartment.inventory) {
-        this.inventory = [...this.selectedApartment.inventory];
-      }
       this.isLoading = false;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -105,9 +110,8 @@ export default {
   },
   methods: {
     selectApartment(apartment) {
-      this.selectedApartment = apartment;
       this.inventory = [];
-      this.isPreview = false;
+      this.selectedApartment = apartment;
     },
     addItem(newItem) {
       if (newItem.name !== "" && newItem.quantity !== 0) {
@@ -119,8 +123,13 @@ export default {
         } else {
           this.inventory.push(newItem);
         }
+        console.log(this.inventory, this.apartments);
       }
-      console.log(this.inventory, this.selectedApartment.inventory);
+    },
+    approveList() {
+      this.selectedApartment.inventory = this.inventory;
+      this.updatedInventory = [...this.selectedApartment.inventory];
+      console.log(this.updatedInventory);
     },
     openModal() {
       this.isPreview = true;

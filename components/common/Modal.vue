@@ -3,7 +3,7 @@
     <form method="dialog" class="modal-box">
       <slot />
     </form>
-    <form method="dialog" class="modal-backdrop">
+    <form method="dialog" class="modal-backdrop bg-gray-900 opacity-50">
       <button @click="closeModal">Close</button>
     </form>
   </dialog>
@@ -21,10 +21,17 @@ export default {
       type: Boolean,
       required: true,
     },
+    buttonClick: {
+      type: Function,
+      required: true,
+    },
   },
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    handleButtonClick() {
+      this.buttonClick();
     },
   },
 };

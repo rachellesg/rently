@@ -1,8 +1,5 @@
 <template>
   <div class="overflow-x-auto my-5">
-    <h3 class="text-lg font-bold text-gray-600 mb-4">
-      Inventory List ({{ inventory.length }} items)
-    </h3>
     <table class="table">
       <thead>
         <tr>

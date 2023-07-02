@@ -5,6 +5,7 @@
         v-model="newItem.name"
         required
         class="select select-bordered select-sm w-4/5">
+        <option value="" disabled selected>Please select an item</option>
         <option value="Sofa">Sofa</option>
         <option value="Bed">Bed</option>
         <option value="Table">Table</option>
