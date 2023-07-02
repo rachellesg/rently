@@ -14,7 +14,11 @@
         <tr v-else v-for="item in inventory" :key="item.id">
           <td class="w-1/2">{{ item.name }}</td>
           <td class="w-1/4">{{ item.quantity }}</td>
-          <td class="w-1/4" v-if="editable"><button>Delete</button></td>
+          <td class="w-1/4" v-if="editable">
+            <button class="btn btn-sm btn-neutral" @click="deleteItem(item)">
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -31,6 +35,11 @@ export default {
     },
     editable: {
       type: Boolean,
+    },
+  },
+  methods: {
+    deleteItem(item) {
+      this.$emit("deleteItem", item);
     },
   },
 };

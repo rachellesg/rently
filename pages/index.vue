@@ -54,6 +54,7 @@
             </p>
             <InventoryList
               :inventory="this.selectedApartment.inventory"
+              @deleteItem="deleteItem"
               editable />
             <InventoryForm
               v-if="totalInventoryItems < 20"
@@ -179,6 +180,17 @@ export default {
       this.selectedApartment.inventory = updatedInventory;
       // clear staged inventory
       this.inventory = [];
+    },
+    deleteItem(item) {
+      // find the index of the item in the inventory array
+      const index = this.selectedApartment.inventory.findIndex(
+        (inventoryItem) => inventoryItem.name === item.name
+      );
+
+      if (index !== -1) {
+        // remove the item from the inventory array
+        this.selectedApartment.inventory.splice(index, 1);
+      }
     },
     openModal() {
       this.isPreview = true;
