@@ -5,10 +5,13 @@
         v-for="apartment in apartments"
         :key="apartment.id"
         @click="selectApartment(apartment)"
-        :class="{ active: selectedApartment === apartment }">
-        <strong>Address:</strong> {{ apartment.address }}<br />
-        <strong>Floor:</strong> {{ apartment.floor }}<br />
-        <strong>Door Number:</strong> {{ apartment.doorNumber }}
+        :class="{
+          'text-pink-500 font-bold': selectedApartment === apartment,
+          'border-b border-gray-200 pb-3 hover:text-pink-500 hover:font-bold cursor-pointer': true,
+        }">
+        {{ apartment.address }}, {{ apartment.floor }}-{{
+          apartment.doorNumber
+        }}
       </li>
     </ul>
   </div>
@@ -43,8 +46,5 @@ h2 {
 li {
   margin-bottom: 20px;
   list-style-type: none;
-}
-.active {
-  border: 1px solid white;
 }
 </style>
