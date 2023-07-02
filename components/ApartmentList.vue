@@ -1,7 +1,11 @@
 <template>
   <div>
     <ul>
-      <li v-for="apartment in apartments" :key="apartment.id">
+      <li
+        v-for="apartment in apartments"
+        :key="apartment.id"
+        @click="selectApartment(apartment)"
+        :class="{ active: selectedApartment === apartment }">
         <strong>Address:</strong> {{ apartment.address }}<br />
         <strong>Floor:</strong> {{ apartment.floor }}<br />
         <strong>Door Number:</strong> {{ apartment.doorNumber }}
@@ -18,6 +22,15 @@ export default {
       type: Array,
       required: true,
     },
+    selectedApartment: {
+      type: Object,
+      default: () => null,
+    },
+  },
+  methods: {
+    selectApartment(apartment) {
+      this.$emit("selectApartment", apartment);
+    },
   },
 };
 </script>
@@ -30,5 +43,8 @@ h2 {
 li {
   margin-bottom: 20px;
   list-style-type: none;
+}
+.active {
+  border: 1px solid white;
 }
 </style>
