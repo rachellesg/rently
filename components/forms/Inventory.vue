@@ -1,6 +1,9 @@
 <template>
   <form @submit.prevent="addItem" class="flex justify-between gap-1">
-    <select v-model="newItem.name" required class="select select-bordered">
+    <select
+      v-model="newItem.name"
+      required
+      class="select select-bordered w-2/5">
       <option disabled selected>Select a furniture item</option>
       <option value="Sofa">Sofa</option>
       <option value="Bed">Bed</option>
@@ -18,8 +21,8 @@
       min="1"
       v-model.number="newItem.quantity"
       placeholder="Item quantity"
-      class="input input-bordered max-w-xs" />
-    <button type="submit" class="btn btn-primary">Add Item</button>
+      class="input input-bordered w-1/5" />
+    <button type="submit" class="btn btn-primary w-2/5">Add Item</button>
   </form>
 </template>
 
@@ -38,7 +41,6 @@ export default {
     addItem() {
       const itemCopy = { ...this.newItem };
       this.$emit("addItem", itemCopy);
-      this.newItem.name = "";
       this.newItem.quantity = 1;
     },
   },
