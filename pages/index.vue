@@ -55,7 +55,10 @@
             <InventoryList
               :inventory="this.selectedApartment.inventory"
               editable />
-            <InventoryForm @addItem="addItem" />
+            <InventoryForm
+              v-if="totalInventoryItems < 20"
+              :totalItems="totalInventoryItems + totalStagedInventoryItems"
+              @addItem="addItem" />
           </template>
         </section>
       </div>
@@ -118,6 +121,12 @@ export default {
           (sum, item) => sum + item.quantity,
           0
         );
+      }
+      return 0;
+    },
+    totalStagedInventoryItems() {
+      if (this.inventory) {
+        return this.inventory.reduce((sum, item) => sum + item.quantity, 0);
       }
       return 0;
     },

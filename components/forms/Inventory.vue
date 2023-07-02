@@ -24,12 +24,11 @@
       <input
         type="number"
         min="1"
+        :max="20 - totalItems"
         v-model.number="newItem.quantity"
         placeholder="Item quantity"
         class="input input-bordered w-1/5 input-sm" />
-      <button type="submit" class="btn btn-accent btn-sm w-1/5">
-        Add Item
-      </button>
+      <button type="submit" class="btn btn-accent btn-sm w-1/5">Add</button>
     </form>
   </div>
 </template>
@@ -37,6 +36,11 @@
 <script>
 export default {
   name: "InventoryForm",
+  props: {
+    totalItems: {
+      type: Number,
+    },
+  },
   data() {
     return {
       newItem: {
