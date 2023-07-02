@@ -4,31 +4,40 @@
       Click on the preview button to view the items, you will need to approve
       the final list before it will be added to the listing.
     </p>
-    <form @submit.prevent="addItem" class="flex justify-between gap-1">
-      <select
-        v-model="newItem.name"
-        required
-        class="select select-bordered select-sm w-4/5">
-        <option value="" disabled selected>Please select an item</option>
-        <option value="Sofa">Sofa</option>
-        <option value="Bed">Bed</option>
-        <option value="Table">Table</option>
-        <option value="Chair">Chair</option>
-        <option value="Cabinet">Cabinet</option>
-        <option value="Fridge">Fridge</option>
-        <option value="Washing Machine">Washing Machine</option>
-        <option value="TV">TV</option>
-        <option value="Dining Set">Dining Set</option>
-        <option value="Bookshelf">Bookshelf</option>
-      </select>
-      <input
-        type="number"
-        min="1"
-        :max="20 - totalItems"
-        v-model.number="newItem.quantity"
-        placeholder="Item quantity"
-        class="input input-bordered w-1/5 input-sm" />
-      <button type="submit" class="btn btn-accent btn-sm w-1/5">Add</button>
+    <form @submit.prevent="addItem" class="flex flex-col justify-between">
+      <div class="flex justify-between mb-3">
+        <select
+          v-model="newItem.name"
+          required
+          class="select select-bordered select-sm w-4/5">
+          <option value="" disabled selected>Please select an item</option>
+          <option value="Sofa">Sofa</option>
+          <option value="Bed">Bed</option>
+          <option value="Table">Table</option>
+          <option value="Chair">Chair</option>
+          <option value="Cabinet">Cabinet</option>
+          <option value="Fridge">Fridge</option>
+          <option value="Washing Machine">Washing Machine</option>
+          <option value="TV">TV</option>
+          <option value="Dining Set">Dining Set</option>
+          <option value="Bookshelf">Bookshelf</option>
+        </select>
+        <input
+          type="number"
+          min="1"
+          :max="20 - totalItems"
+          v-model.number="newItem.quantity"
+          placeholder="Item quantity"
+          class="input input-bordered input-sm w-1/4" />
+      </div>
+      <div class="mb-3">
+        <input
+          type="file"
+          accept="image/jpeg, image/png"
+          @change="handleImageUpload"
+          class="file-input file-input-sm w-full" />
+      </div>
+      <button type="submit" class="btn btn-accent btn-sm">Add</button>
     </form>
   </div>
 </template>
@@ -46,6 +55,7 @@ export default {
       newItem: {
         name: "",
         quantity: 1,
+        imageUrl: "",
       },
     };
   },
@@ -54,6 +64,15 @@ export default {
       const itemCopy = { ...this.newItem };
       this.$emit("addItem", itemCopy);
       this.newItem.quantity = 1;
+    },
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      const maxFileSizeInBytes = 1 * 1024 * 1024; // 1MB
+      if (file.size > maxFileSizeInBytes) {
+        console.log("File size exceeds the maximum limit.");
+        return;
+      }
+      this.newItem.imageUrl = URL.createObjectURL(file);
     },
   },
 };

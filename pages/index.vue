@@ -12,7 +12,7 @@
       </h1>
       <div class="content md:flex-row flex-col flex justify-between md:gap-5">
         <div
-          class="w-full bg-white md:w-1/3 border border-slate-200 rounded-lg p-5">
+          class="w-full bg-white md:w-1/3 border border-slate-200 rounded-lg p-5 md:m-0 mb-5">
           <h2 class="mb-4 text-lg font-bold">Listings</h2>
           <ApartmentList
             :apartments="apartments"
@@ -74,7 +74,8 @@
     <InventoryList :inventory="this.inventory" />
     <button class="btn btn-primary" @click="approveList">Approve</button>
   </ModalDialog>
-  {{ console.log(inventory, selectedApartment) }}
+
+  {{ console.log(apartments) }}
 </template>
 
 <script>
