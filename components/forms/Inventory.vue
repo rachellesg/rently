@@ -1,5 +1,9 @@
 <template>
   <div class="bg-gray-100 px-4 py-2 rounded-lg">
+    <p class="text-xs mb-2">
+      Click on the preview button to view the items, you will need to approve
+      the final list before it will be added to the listing.
+    </p>
     <form @submit.prevent="addItem" class="flex justify-between gap-1">
       <select
         v-model="newItem.name"

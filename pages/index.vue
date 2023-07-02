@@ -39,20 +39,22 @@
                 Preview
               </button>
             </div>
-            <p>
+            <img src="https://placehold.co/1000x300" alt="Main Image " />
+            <h3 class="text-lg font-bold text-gray-600 my-5">
+              Inventory List ({{ selectedApartment.inventory.length }} items)
+            </h3>
+            <p class="text-xs">
               Inventory is a comprehensive list of items present in each
               apartment, ranging from furniture to appliances and other
               essential household items. Each apartment has its own unique
               inventory, reflecting the diverse needs and preferences of the
               residents.
+              <span class="font-bold">Maximum of 20 items allowed.</span>
             </p>
-            <h3 class="text-lg font-bold text-gray-600 my-5">
-              Inventory List ({{ inventory.length }} items)
-            </h3>
-            <InventoryForm @addItem="addItem" />
             <InventoryList
               :inventory="this.selectedApartment.inventory"
               editable />
+            <InventoryForm @addItem="addItem" />
           </template>
         </section>
       </div>
@@ -119,17 +121,43 @@ export default {
           (item) => item.name === newItem.name
         );
         if (existingItem) {
+          // if exists, add quantity
           existingItem.quantity += newItem.quantity;
         } else {
           this.inventory.push(newItem);
         }
-        console.log(this.inventory, this.apartments);
       }
     },
     approveList() {
-      this.selectedApartment.inventory = this.inventory;
-      this.updatedInventory = [...this.selectedApartment.inventory];
-      console.log(this.updatedInventory);
+      const updatedInventory = [];
+
+      // combine existing and new
+      const mergedInventory = [
+        ...this.selectedApartment.inventory,
+        ...this.inventory,
+      ];
+
+      // iterate over merged inventory
+      mergedInventory.forEach((item) => {
+        const existingItem = updatedInventory.find(
+          (updatedItem) => updatedItem.name === item.name
+        );
+
+        if (existingItem) {
+          // if exists, add quantity
+          existingItem.quantity += item.quantity;
+        } else {
+          // else add item to array
+          updatedInventory.push({ ...item });
+        }
+      });
+
+      // update the inventory
+      this.updatedInventory = updatedInventory;
+      // update data's inventory with updated inventory
+      this.selectedApartment.inventory = updatedInventory;
+      // clear staged inventory
+      this.inventory = [];
     },
     openModal() {
       this.isPreview = true;
