@@ -66,10 +66,15 @@ export default {
     addItem() {
       const itemCopy = { ...this.newItem };
       this.$emit("addItem", itemCopy);
+      this.resetForm();
+    },
+    resetForm() {
+      this.newItem.name = "";
       this.newItem.quantity = 1;
-      this.$refs.nameInput.selectedIndex = -1; // Reset the selected option
-      this.$refs.quantityInput.value = ""; // Reset the quantity input value
-      this.$refs.fileInput.value = ""; // Reset the file input value
+      this.newItem.imageUrl = "";
+      this.$refs.nameInput.selectedIndex = -1;
+      this.$refs.quantityInput.value = 1;
+      this.$refs.fileInput.value = "";
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
