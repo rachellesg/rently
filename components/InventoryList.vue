@@ -1,6 +1,8 @@
 <template>
   <div class="overflow-x-auto my-5">
-    <h2 class="text-xl font-bold">Inventory List</h2>
+    <h3 class="text-lg font-bold text-gray-600 mb-4">
+      Inventory List ({{ inventory.length }} items)
+    </h3>
     <table class="table">
       <thead>
         <tr>
@@ -13,8 +15,9 @@
           <td colspan="2">No items in inventory</td>
         </tr>
         <tr v-else v-for="item in inventory" :key="item.id">
-          <td>{{ item.name }}</td>
-          <td>{{ item.quantity }}</td>
+          <td class="w-1/2">{{ item.name }}</td>
+          <td class="w-1/4">{{ item.quantity }}</td>
+          <td class="w-1/4" v-if="editable"><button>Delete</button></td>
         </tr>
       </tbody>
     </table>
@@ -28,6 +31,9 @@ export default {
     inventory: {
       type: Array,
       required: true,
+    },
+    editable: {
+      type: Boolean,
     },
   },
 };

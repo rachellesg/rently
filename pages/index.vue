@@ -5,36 +5,70 @@
     </div>
   </template>
   <template v-else>
-    <div
-      class="container mx-auto md:flex-row flex-col flex justify-between md:gap-5">
-      <div class="w-full md:w-2/5">
-        <ApartmentList
-          :apartments="apartments"
-          :selectedApartment="selectedApartment"
-          @selectApartment="selectApartment" />
-        <template v-if="error">
-          <div class="error-message">{{ error }}</div>
-        </template>
+    <div class="container mx-auto">
+      <h1 class="text-xl font-bold mb-5">
+        <span class="text-primary">{{ apartments.length }}</span>
+        Available Apartments
+      </h1>
+      <div class="content md:flex-row flex-col flex justify-between md:gap-5">
+        <div
+          class="w-full bg-white md:w-1/3 border border-slate-200 rounded-lg p-5">
+          <h2 class="mb-4 text-lg font-bold">Listings</h2>
+          <ApartmentList
+            :apartments="apartments"
+            :selectedApartment="selectedApartment"
+            @selectApartment="selectApartment" />
+          <template v-if="error">
+            <div class="error-message">{{ error }}</div>
+          </template>
+        </div>
+        <section
+          class="w-full bg-white md:w-2/3 border border-slate-200 rounded-lg p-5">
+          <template v-if="selectedApartment">
+            <div
+              class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
+              <h2 class="text-xl font-bold text-gray-800 flex">
+                {{ selectedApartment.address }} #{{
+                  selectedApartment.floor
+                }}-{{ selectedApartment.doorNumber }}
+              </h2>
+              <button
+                @click="openModal"
+                class="btn btn-primary btn-sm"
+                :disabled="inventory.length === 0">
+                Preview
+              </button>
+            </div>
+            <p>
+              Inventory is a comprehensive list of items present in each
+              apartment, ranging from furniture to appliances and other
+              essential household items. Each apartment has its own unique
+              inventory, reflecting the diverse needs and preferences of the
+              residents.
+            </p>
+            <InventoryList :inventory="this.inventory" editable />
+            <InventoryForm @addItem="addItem" />
+          </template>
+        </section>
       </div>
-      <section class="w-full md:w-3/5">
-        <template v-if="selectedApartment">
-          <h2>
-            {{ selectedApartment.address }} #{{ selectedApartment.floor }}-{{
-              selectedApartment.doorNumber
-            }}
-          </h2>
-          <InventoryList :inventory="selectedApartment.inventory" />
-          <InventoryForm @addItem="addItem" />
-        </template>
-      </section>
     </div>
   </template>
+  <ModalDialog
+    modal-id="preview-modal"
+    :visible="isPreview"
+    @close="closeModal">
+    <h3 class="font-bold text-lg">Preview Inventory List</h3>
+    <InventoryList :inventory="this.inventory" />
+    <button class="btn btn-primary">Approve</button>
+  </ModalDialog>
 </template>
 
 <script>
 import ApartmentList from "@/components/ApartmentList.vue";
 import InventoryList from "@/components/InventoryList.vue";
 import InventoryForm from "@/components/forms/Inventory.vue";
+import ModalDialog from "@/components/common/Modal.vue";
+
 import { getApartmentsData } from "@/server/api/apartments.ts";
 
 export default {
@@ -43,19 +77,25 @@ export default {
     ApartmentList,
     InventoryList,
     InventoryForm,
+    ModalDialog,
   },
   data() {
     return {
       isLoading: true,
+      isPreview: false,
       apartments: [],
       error: null,
       selectedApartment: null,
+      inventory: [],
     };
   },
   async mounted() {
     try {
       this.apartments = await getApartmentsData();
       this.selectedApartment = this.apartments[0] || null;
+      if (this.selectedApartment && this.selectedApartment.inventory) {
+        this.inventory = [...this.selectedApartment.inventory];
+      }
       this.isLoading = false;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -66,18 +106,27 @@ export default {
   methods: {
     selectApartment(apartment) {
       this.selectedApartment = apartment;
+      this.inventory = [];
+      this.isPreview = false;
     },
     addItem(newItem) {
       if (newItem.name !== "" && newItem.quantity !== 0) {
-        const existingItem = this.selectedApartment.inventory.find(
+        const existingItem = this.inventory.find(
           (item) => item.name === newItem.name
         );
         if (existingItem) {
           existingItem.quantity += newItem.quantity;
         } else {
-          this.selectedApartment.inventory.push(newItem);
+          this.inventory.push(newItem);
         }
       }
+      console.log(this.inventory, this.selectedApartment.inventory);
+    },
+    openModal() {
+      this.isPreview = true;
+    },
+    closeModal() {
+      this.isPreview = false;
     },
   },
 };
