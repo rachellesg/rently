@@ -7,14 +7,14 @@
   <template v-else>
     <div class="container mx-auto">
       <h1 class="text-xl font-bold mb-5">
-        <span class="text-primary">{{ apartments.length }}</span>
+        <span class="text-primary">{{ apartments?.length }}</span>
         Available Apartments
       </h1>
       <div class="content md:flex-row flex-col flex justify-between md:gap-5">
         <div
           class="w-full dark:bg-stone-800 bg-white md:w-1/3 border border-slate-200 rounded-lg p-5 md:m-0 mb-5">
           <h2 class="mb-4 text-lg font-bold">
-            Listings ({{ filteredListings.length }})
+            Listings ({{ filteredListings?.length }})
           </h2>
           <input
             type="text"
@@ -36,14 +36,14 @@
             <div
               class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
               <h2 class="text-xl font-bold flex">
-                {{ selectedApartment.address }} #{{
-                  selectedApartment.floor
-                }}-{{ selectedApartment.doorNumber }}
+                {{ selectedApartment?.address }} #{{
+                  selectedApartment?.floor
+                }}-{{ selectedApartment?.doorNumber }}
               </h2>
               <button
                 @click="openModal"
                 class="btn btn-primary btn-sm"
-                :disabled="inventory.length === 0">
+                :disabled="inventory?.length === 0">
                 Preview
               </button>
             </div>
@@ -82,8 +82,6 @@
     <InventoryList :inventory="this.inventory" />
     <button class="btn btn-primary" @click="approveList">Approve</button>
   </ModalDialog>
-
-  {{ console.log(apartments) }}
 </template>
 
 <script>
@@ -91,6 +89,7 @@ import ApartmentList from "@/components/ApartmentList.vue";
 import InventoryList from "@/components/InventoryList.vue";
 import InventoryForm from "@/components/forms/Inventory.vue";
 import ModalDialog from "@/components/common/Modal.vue";
+import Snackbar from "@/components/common/Snackbar.vue";
 
 import { getApartmentsData } from "@/server/api/apartments.ts";
 
@@ -101,6 +100,7 @@ export default {
     InventoryList,
     InventoryForm,
     ModalDialog,
+    Snackbar,
   },
   data() {
     return {
@@ -167,6 +167,7 @@ export default {
         } else {
           this.inventory.push(newItem);
         }
+        openSnackbar();
       }
     },
     approveList() {
