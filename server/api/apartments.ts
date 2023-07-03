@@ -20,6 +20,6 @@ export const getApartmentsData = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(apartmentsData);
-    }, 1000);
+    }, 500);
   });
 };

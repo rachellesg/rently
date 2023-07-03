@@ -5,7 +5,7 @@
     </div>
   </template>
   <template v-else>
-    <div class="container mx-auto">
+    <div class="container mx-auto" v-if="selectedApartment">
       <h1 class="text-xl font-bold mb-5">
         <span class="text-primary">{{ apartments?.length }}</span>
         Available Apartments
@@ -32,7 +32,7 @@
         </div>
         <section
           class="w-full dark:bg-stone-800 bg-white md:w-2/3 border border-slate-200 rounded-lg p-5">
-          <template v-if="selectedApartment">
+          <template>
             <div
               class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
               <h2 class="text-xl font-bold flex">
@@ -40,10 +40,7 @@
                   selectedApartment?.floor
                 }}-{{ selectedApartment?.doorNumber }}
               </h2>
-              <button
-                @click="openModal"
-                class="btn btn-primary btn-sm"
-                :disabled="this.inventory?.length === 0">
+              <button @click="openModal" class="btn btn-primary btn-sm">
                 Preview
               </button>
             </div>
