@@ -5,7 +5,7 @@
     </div>
   </template>
   <template v-else>
-    <div class="container mx-auto" v-if="selectedApartment">
+    <div class="container mx-auto">
       <h1 class="text-xl font-bold mb-5">
         <span class="text-primary">{{ apartments?.length }}</span>
         Available Apartments
@@ -32,40 +32,40 @@
         </div>
         <section
           class="w-full dark:bg-stone-800 bg-white md:w-2/3 border border-slate-200 rounded-lg p-5">
-          <template>
-            <div
-              class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
-              <h2 class="text-xl font-bold flex">
-                {{ selectedApartment?.address }} #{{
-                  selectedApartment?.floor
-                }}-{{ selectedApartment?.doorNumber }}
-              </h2>
-              <button @click="openModal" class="btn btn-primary btn-sm">
-                Preview
-              </button>
-            </div>
-            <img src="https://placehold.co/1000x300" alt="Main Image " />
-            <h3 class="text-lg font-bold my-5">
-              Inventory List ({{ totalInventoryItems }}
-              items)
-            </h3>
-            <p class="text-xs">
-              Inventory is a comprehensive list of items present in each
-              apartment, ranging from furniture to appliances and other
-              essential household items. Each apartment has its own unique
-              inventory, reflecting the diverse needs and preferences of the
-              residents.
-              <span class="font-bold">Maximum of 20 items allowed.</span>
-            </p>
-            <InventoryList
-              :inventory="this.selectedApartment.inventory"
-              @deleteItem="deleteItem"
-              editable />
-            <InventoryForm
-              v-if="totalInventoryItems < 20"
-              :totalItems="totalInventoryItems + totalStagedInventoryItems"
-              @addItem="addItem" />
-          </template>
+          <div
+            class="flex justify-between items-center pb-5 mb-5 border-b border-slate-200">
+            <h2 class="text-xl font-bold flex">
+              {{ selectedApartment?.address }} #{{
+                selectedApartment?.floor
+              }}-{{ selectedApartment?.doorNumber }}
+            </h2>
+            <button
+              @click="openModal"
+              class="btn btn-primary btn-sm"
+              :disabled="inventory.length === 0">
+              Preview
+            </button>
+          </div>
+          <img src="https://placehold.co/1000x300" alt="Main Image " />
+          <h3 class="text-lg font-bold my-5">
+            Inventory List ({{ totalInventoryItems }}
+            items)
+          </h3>
+          <p class="text-xs">
+            Inventory is a comprehensive list of items present in each
+            apartment, ranging from furniture to appliances and other essential
+            household items. Each apartment has its own unique inventory,
+            reflecting the diverse needs and preferences of the residents.
+            <span class="font-bold">Maximum of 20 items allowed.</span>
+          </p>
+          <InventoryList
+            :inventory="selectedApartment.inventory"
+            @deleteItem="deleteItem"
+            editable />
+          <InventoryForm
+            v-if="totalInventoryItems < 20"
+            :totalItems="totalInventoryItems + totalStagedInventoryItems"
+            @addItem="addItem" />
         </section>
       </div>
     </div>
@@ -76,17 +76,17 @@
     @close="closeModal"
     :buttonClick="approveList">
     <h3 class="font-bold text-lg">Preview Inventory List</h3>
-    <InventoryList :inventory="this.inventory" />
+    <InventoryList :inventory="inventory" />
     <button class="btn btn-primary" @click="approveList">Approve</button>
   </ModalDialog>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
 import ApartmentList from "@/components/ApartmentList.vue";
 import InventoryList from "@/components/InventoryList.vue";
 import InventoryForm from "@/components/forms/Inventory.vue";
 import ModalDialog from "@/components/common/Modal.vue";
-
 import { getApartmentsData } from "@/server/api/apartments.ts";
 
 export default {
@@ -97,86 +97,69 @@ export default {
     InventoryForm,
     ModalDialog,
   },
-  data() {
-    return {
-      isLoading: true,
-      isPreview: false,
-      apartments: [],
-      error: null,
-      selectedApartment: null,
-      inventory: [],
-      updatedInventory: [],
-      searchQuery: "",
-    };
-  },
-  async mounted() {
-    try {
-      this.apartments = await getApartmentsData();
-      this.selectedApartment = this.apartments[0] || null;
-      this.isLoading = false;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      this.isLoading = false;
-      this.error = "Failed to fetch data. Please try again later.";
-    }
-  },
-  computed: {
-    totalInventoryItems() {
-      if (this.selectedApartment && this.selectedApartment.inventory) {
-        return this.selectedApartment.inventory.reduce(
+  setup() {
+    const isLoading = ref(true);
+    const isPreview = ref(false);
+    const apartments = ref([]);
+    const error = ref(null);
+    const selectedApartment = ref(null);
+    const inventory = ref([]);
+    const updatedInventory = ref([]);
+    const searchQuery = ref("");
+
+    const totalInventoryItems = computed(() => {
+      if (selectedApartment.value && selectedApartment.value.inventory) {
+        return selectedApartment.value.inventory.reduce(
           (sum, item) => sum + item.quantity,
           0
         );
       }
       return 0;
-    },
-    totalStagedInventoryItems() {
-      if (this.inventory) {
-        return this.inventory.reduce((sum, item) => sum + item.quantity, 0);
+    });
+
+    const totalStagedInventoryItems = computed(() => {
+      if (inventory.value) {
+        return inventory.value.reduce((sum, item) => sum + item.quantity, 0);
       }
       return 0;
-    },
-    filteredListings() {
-      const query = this.searchQuery.toLowerCase().toString();
-      return this.apartments.filter(
+    });
+
+    const filteredListings = computed(() => {
+      const query = searchQuery.value.toLowerCase().toString();
+      return apartments.value.filter(
         (item) =>
           item.address.toLowerCase().includes(query) ||
           item.floor.toString().includes(query) ||
           item.doorNumber.toString().includes(query)
       );
-    },
-  },
-  methods: {
-    selectApartment(apartment) {
-      this.inventory = [];
-      this.selectedApartment = apartment;
-    },
-    addItem(newItem) {
+    });
+
+    const selectApartment = (apartment) => {
+      inventory.value = [];
+      selectedApartment.value = apartment;
+    };
+
+    const addItem = (newItem) => {
       if (newItem.name !== "" && newItem.quantity !== 0) {
-        const existingItem = this.inventory.find(
+        const existingItem = inventory.value.find(
           (item) => item.name === newItem.name
         );
         if (existingItem) {
           // if exists, add quantity
           existingItem.quantity += newItem.quantity;
         } else {
-          this.inventory.push(newItem);
+          inventory.value.push(newItem);
         }
-        openSnackbar();
       }
-    },
-    approveList() {
-      const updatedInventory = [];
+    };
 
-      // combine existing and new
+    const approveList = () => {
       const mergedInventory = [
-        ...this.selectedApartment.inventory,
-        ...this.inventory,
+        ...selectedApartment.value.inventory,
+        ...inventory.value,
       ];
-
-      // iterate over merged inventory
-      mergedInventory.forEach((item) => {
-        const existingItem = updatedInventory.find(
+      const updatedInventory = mergedInventory.reduce((updated, item) => {
+        const existingItem = updated.find(
           (updatedItem) => updatedItem.name === item.name
         );
 
@@ -185,34 +168,74 @@ export default {
           existingItem.quantity += item.quantity;
         } else {
           // else add item to array
-          updatedInventory.push({ ...item });
+          updated.push({ ...item });
         }
-      });
+
+        return updated;
+      }, []);
 
       // update the inventory
-      this.updatedInventory = updatedInventory;
+      updatedInventory.value = updatedInventory;
       // update data's inventory with updated inventory
-      this.selectedApartment.inventory = updatedInventory;
+      selectedApartment.value.inventory = updatedInventory;
       // clear staged inventory
-      this.inventory = [];
-    },
-    deleteItem(item) {
+      inventory.value = [];
+    };
+
+    const deleteItem = (item) => {
       // find the index of the item in the inventory array
-      const index = this.selectedApartment.inventory.findIndex(
+      const index = selectedApartment.value.inventory.findIndex(
         (inventoryItem) => inventoryItem.name === item.name
       );
 
       if (index !== -1) {
         // remove the item from the inventory array
-        this.selectedApartment.inventory.splice(index, 1);
+        selectedApartment.value.inventory.splice(index, 1);
       }
-    },
-    openModal() {
-      this.isPreview = true;
-    },
-    closeModal() {
-      this.isPreview = false;
-    },
+    };
+
+    const openModal = () => {
+      isPreview.value = true;
+    };
+
+    const closeModal = () => {
+      isPreview.value = false;
+    };
+
+    onMounted(() => {
+      getApartmentsData()
+        .then((apartmentData) => {
+          apartments.value = apartmentData;
+          selectedApartment.value = apartments.value[0] || null;
+          isLoading.value = false;
+          console.log(apartmentData);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          isLoading.value = false;
+          error.value = "Failed to fetch data. Please try again later.";
+        });
+    });
+
+    return {
+      isLoading,
+      isPreview,
+      apartments,
+      error,
+      selectedApartment,
+      inventory,
+      updatedInventory,
+      searchQuery,
+      totalInventoryItems,
+      totalStagedInventoryItems,
+      filteredListings,
+      selectApartment,
+      addItem,
+      approveList,
+      deleteItem,
+      openModal,
+      closeModal,
+    };
   },
 };
 </script>

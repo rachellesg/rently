@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { defineProps, defineEmits } from "vue";
+
 export default {
   name: "InventoryList",
   props: {
@@ -42,10 +44,16 @@ export default {
       type: Boolean,
     },
   },
-  methods: {
-    deleteItem(item) {
-      this.$emit("deleteItem", item);
-    },
+  setup(props) {
+    const deleteItem = (item) => {
+      emit("deleteItem", item);
+    };
+
+    const emit = defineEmits(["deleteItem"]);
+
+    return {
+      deleteItem,
+    };
   },
 };
 </script>

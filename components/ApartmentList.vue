@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { defineProps, defineEmits } from "vue";
+
 export default {
   name: "ApartmentList",
   props: {
@@ -30,10 +32,16 @@ export default {
       default: () => null,
     },
   },
-  methods: {
-    selectApartment(apartment) {
-      this.$emit("selectApartment", apartment);
-    },
+  setup(props) {
+    const selectApartment = (apartment) => {
+      emit("selectApartment", apartment);
+    };
+
+    const emit = defineEmits(["selectApartment"]);
+
+    return {
+      selectApartment,
+    };
   },
 };
 </script>
