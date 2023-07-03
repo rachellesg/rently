@@ -43,7 +43,7 @@
               <button
                 @click="openModal"
                 class="btn btn-primary btn-sm"
-                :disabled="inventory?.length === 0">
+                :disabled="this.inventory?.length === 0">
                 Preview
               </button>
             </div>
@@ -89,7 +89,6 @@ import ApartmentList from "@/components/ApartmentList.vue";
 import InventoryList from "@/components/InventoryList.vue";
 import InventoryForm from "@/components/forms/Inventory.vue";
 import ModalDialog from "@/components/common/Modal.vue";
-import Snackbar from "@/components/common/Snackbar.vue";
 
 import { getApartmentsData } from "@/server/api/apartments.ts";
 
@@ -100,7 +99,6 @@ export default {
     InventoryList,
     InventoryForm,
     ModalDialog,
-    Snackbar,
   },
   data() {
     return {
