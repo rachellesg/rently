@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { defineProps, defineEmits } from "vue";
+
 export default {
   name: "ModalDialog",
   props: {
@@ -26,13 +28,30 @@ export default {
       required: true,
     },
   },
-  methods: {
-    closeModal() {
-      this.$emit("close");
-    },
-    handleButtonClick() {
-      this.buttonClick();
-    },
+  setup(props) {
+    const { closeModal, handleButtonClick } = useModalDialog(props);
+
+    return {
+      closeModal,
+      handleButtonClick,
+    };
   },
 };
+
+function useModalDialog(props) {
+  const closeModal = () => {
+    emit("close");
+  };
+
+  const handleButtonClick = () => {
+    props.buttonClick();
+  };
+
+  const emit = defineEmits(["close"]);
+
+  return {
+    closeModal,
+    handleButtonClick,
+  };
+}
 </script>

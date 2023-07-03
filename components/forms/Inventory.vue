@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "InventoryForm",
   props: {
@@ -53,38 +55,44 @@ export default {
       type: Number,
     },
   },
-  data() {
-    return {
-      newItem: {
-        name: "",
-        quantity: 1,
-        imageUrl: "",
-      },
+  setup(props, { emit }) {
+    const newItem = ref({
+      name: "",
+      quantity: 1,
+      imageUrl: "",
+    });
+
+    const addItem = () => {
+      const itemCopy = { ...newItem.value };
+      emit("addItem", itemCopy);
+      resetForm();
     };
-  },
-  methods: {
-    addItem() {
-      const itemCopy = { ...this.newItem };
-      this.$emit("addItem", itemCopy);
-      this.resetForm();
-    },
-    resetForm() {
-      this.newItem.name = "";
-      this.newItem.quantity = 1;
-      this.newItem.imageUrl = "";
-      this.$refs.nameInput.selectedIndex = -1;
-      this.$refs.quantityInput.value = 1;
-      this.$refs.fileInput.value = "";
-    },
-    handleImageUpload(event) {
+
+    const resetForm = () => {
+      newItem.value.name = "";
+      newItem.value.quantity = 1;
+      newItem.value.imageUrl = "";
+      ref.nameInput.selectedIndex = -1;
+      ref.quantityInput.value = 1;
+      ref.fileInput.value = "";
+    };
+
+    const handleImageUpload = (event) => {
       const file = event.target.files[0];
       const maxFileSizeInBytes = 1 * 1024 * 1024; // 1MB
       if (file.size > maxFileSizeInBytes) {
         console.log("File size exceeds the maximum limit.");
         return;
       }
-      this.newItem.imageUrl = URL.createObjectURL(file);
-    },
+      newItem.value.imageUrl = URL.createObjectURL(file);
+    };
+
+    return {
+      newItem,
+      addItem,
+      resetForm,
+      handleImageUpload,
+    };
   },
 };
 </script>

@@ -32,12 +32,10 @@ export default {
       default: () => null,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const selectApartment = (apartment) => {
       emit("selectApartment", apartment);
     };
-
-    const emit = defineEmits(["selectApartment"]);
 
     return {
       selectApartment,
